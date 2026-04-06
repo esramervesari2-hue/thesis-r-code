@@ -56,12 +56,12 @@ OR_table
 library(dplyr)
 library(lme4)
 
-# Sadece Heritage speakers ve eksik Devoicing değerlerini çıkarma
+# Heritage speakers only and removal of missing Devoicing values
 data_H <- data3 %>%
   filter(Group == "Heritage") %>%
   filter(!is.na(Devoicing))
 
-# Değişken türleri
+# Variable types
 data_H$Participant_ID <- as.factor(data_H$Participant_ID)
 data_H$Word <- as.factor(data_H$Word)
 data_H$Early_German_Exposure <- as.numeric(data_H$`Early_German_Exposure (RQ3-1)`)
@@ -78,9 +78,9 @@ model_RQ3_1 <- glmer(
 )
 
 # Error: boundary (singular) fit
-# Word random intercept varyansı 0 olduğu için Word çıkarılıyor.
+# The variance of the random intercept for Word was 0, so Word was removed.
 
-# Model RQ3_1 Final
+# Final model for RQ3_1
 model_RQ3_1_final <- glmer(
   Devoicing ~ Early_German_Exposure + (1 | Participant_ID),
   data = data_H,
@@ -99,9 +99,9 @@ model_RQ3_2 <- glmer(
 )
 
 # Error: boundary (singular) fit
-# Word random intercept varyansı 0 olduğu için Word çıkarılıyor.
+# The variance of the random intercept for Word was 0, so Word was removed.
 
-# Model RQ3_2 Final simple
+# Final simplified model for RQ3_2
 model_RQ3_2_simple <- glmer(
   Devoicing ~ Early_German_Exposure + Turkish_Daily_Use +
     (1 | Participant_ID),
@@ -113,18 +113,18 @@ AIC(model_RQ3_2, model_RQ3_2_simple)
 
 # model_RQ3_2 = 119.7118
 # model_RQ3_2_simple = 117.7118
-# Daha düşük AIC nedeniyle simple model tercih edilir.
+# The simpler model was preferred because it had the lower AIC.
 
 summary(model_RQ3_2_simple)
 
-# Model RQ3_3 Writing
+# Model RQ3_3: Writing
 model_RQ3_3_Writing <- glmer(
   Devoicing ~ Writing + (1 | Participant_ID),
   family = binomial,
   data = data_H
 )
 
-# Model RQ3_3 Schooling
+# Model RQ3_3: Schooling
 model_RQ3_3_Schooling <- glmer(
   Devoicing ~ Schooling + (1 | Participant_ID),
   family = binomial,
